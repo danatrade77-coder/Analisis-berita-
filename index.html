@@ -3,300 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analisis Tunjangan DPRD Malut</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Chosen Palette: Warm Neutral & Teal -->
-    <!-- Application Structure Plan: Struktur SPA dengan Tab ('Ringkasan', 'Analisis Tunjangan', 'Proses Hukum', 'Data & Dampak'). Struktur tematik non-linear ini dipilih agar pengguna dapat langsung mengakses bagian analisis yang paling mereka minati, alih-alih meniru struktur laporan. Interaksi kunci ada di tab 'Analisis Tunjangan', yang menyediakan perbandingan dinamis langsung antara 'Apa kata hukum' dan 'Apa yang diduga terjadi', untuk mendorong pemahaman yang lebih dalam. Tab 'Data & Dampak' mengisolasi implikasi finansial, memperjelas skala masalahnya. -->
-    <!-- Visualization & Content Choices: 
-        - Report Info: Ringkasan dugaan -> Goal: Inform -> Presentation: Blok teks kunci (HTML/Tailwind) -> Interaction: None -> Justification: Gambaran umum yang cepat.
-        - Report Info: Bagian 2 (Operasional/Rumah Tangga) -> Goal: Compare/Organize -> Presentation: Tata letak dua kolom interaktif (HTML/Tailwind) -> Interaction: Pengguna mengklik tombol ('Operasional', 'Rumah Tangga') untuk memperbarui konten kolom secara dinamis (JS) -> Justification: Menciptakan perbandingan yang menarik dan didorong oleh pengguna yang merupakan inti tesis laporan.
-        - Report Info: Bagian 4 (Alasan Kejaksaan) -> Goal: Inform/Organize -> Presentation: Tata letak 4 kartu dengan ikon Unicode (HTML/Tailwind) -> Interaction: Efek hover -> Justification: Memecah alasan hukum yang kompleks menjadi bagian-bagian visual yang mudah dicerna.
-        - Report Info: Bagian 3 (Angka finansial) -> Goal: Inform/Compare -> Viz: Bar Chart (Chart.js/Canvas) -> Interaction: Tooltip saat hover -> Justification: Mengukur skala 'Potensi Kerugian' (162 Miliar) secara visual terhadap dasar hukum (diasumsikan 0) untuk tunjangan khusus ini, memberikan dampak tinggi. Ditempatkan dalam div .chart-container yang ditata (w-full, max-w-2xl, h-96, mx-auto) dengan maintainAspectRatio: false.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
+    <title>Analisis Dugaan Tunjangan DPRD Maluku Utara</title>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
         }
-        .chart-container {
-            position: relative;
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 10px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #34495e;
+        }
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            background-color: #1abc9c;
+        }
+        section {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .icon {
+            font-size: 18px;
+            margin-right: 6px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        .data-box {
+            background-color: #ecf0f1;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+        }
+        table {
             width: 100%;
-            max-width: 48rem; /* max-w-2xl */
-            margin-left: auto;
-            margin-right: auto;
-            height: 24rem; /* h-96 */
+            border-collapse: collapse;
+            margin: 15px 0;
         }
-        @media (min-width: 640px) {
-            .chart-container {
-                height: 25rem; /* sm:h-[400px] */
-            }
+        table, th, td {
+            border: 1px solid #bdc3c7;
+        }
+        th, td {
+            padding: 8px 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #2c3e50;
+            color: white;
+            margin-top: 20px;
         }
     </style>
 </head>
-<body class="bg-neutral-50 text-neutral-800">
+<body>
 
-    <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        
-        <header class="mb-8">
-            <h1 class="text-3xl font-bold text-teal-700 tracking-tight">Analisis Interaktif</h1>
-            <p class="text-4xl font-bold text-neutral-900 mt-1">Dugaan Tunjangan DPRD Maluku Utara</p>
-            <p class="mt-4 text-lg text-neutral-600">Sebuah telaah interaktif mengenai dugaan penerimaan tunjangan operasional dan rumah tangga berdasarkan Peraturan Pemerintah No. 18 Tahun 2017.</p>
-        </header>
+<header>
+    <h1>Analisis Interaktif Dugaan Tunjangan DPRD Maluku Utara</h1>
+</header>
 
-        <main>
-            <div class="mb-6">
-                <nav class="flex flex-wrap -mb-px border-b border-neutral-200" aria-label="Tabs">
-                    <button class="nav-tab active-tab" data-tab="ringkasan">
-                        Ringkasan
-                    </button>
-                    <button class="nav-tab" data-tab="analisis">
-                        Analisis Tunjangan
-                    </button>
-                    <button class="nav-tab" data-tab="proses-hukum">
-                        Proses Hukum
-                    </button>
-                    <button class="nav-tab" data-tab="dampak">
-                        Data & Dampak
-                    </button>
-                </nav>
-            </div>
+<nav>
+    <a href="#ringkasan">Ringkasan</a>
+    <a href="#analisis">Analisis Tunjangan</a>
+    <a href="#proses">Proses Hukum</a>
+    <a href="#dampak">Data & Dampak</a>
+</nav>
 
-            <div id="tab-content" class="mt-8">
-                <div id="ringkasan" class="tab-pane block">
-                    <p class="text-base text-neutral-600 mb-6">Bagian ini memberikan gambaran umum tentang kasus yang sedang diselidiki, temuan utama dari analisis regulasi, dan visualisasi sederhana dari inti konflik hukum yang terjadi.</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-xl shadow-lg p-6">
-                            <h2 class="text-xl font-semibold text-teal-700 mb-3">Kasus Singkat</h2>
-                            <p class="text-neutral-700 mb-4">Penyelidikan Kejaksaan Tinggi (Kejati) Malut berfokus pada dugaan penerimaan tunjangan ganda oleh seluruh anggota DPRD periode 2019-2024.</p>
-                            <div class="space-y-3">
-                                <div class="flex items-center p-3 bg-neutral-100 rounded-lg">
-                                    <span class="text-2xl mr-3">💰</span>
-                                    <span>Tunjangan sebesar <strong class="text-neutral-900">Rp 60 Juta per bulan</strong> per anggota.</span>
-                                </div>
-                                <div class="flex items-center p-3 bg-neutral-100 rounded-lg">
-                                    <span class="text-2xl mr-3">👥</span>
-                                    <span>Diduga diterima oleh <strong class="text-neutral-900">seluruh anggota</strong>, bukan hanya pimpinan.</span>
-                                </div>
-                                <div class="flex items-center p-3 bg-neutral-100 rounded-lg">
-                                    <span class="text-2xl mr-3">📜</span>
-                                    <span>Tunjangan bernama "Operasional dan Rumah Tangga".</span>
-                                </div>
-                            </div>
-                        </div>
+<section id="ringkasan">
+    <h2>Ringkasan</h2>
+    <p>Bagian ini memberikan gambaran umum tentang kasus yang sedang diselidiki, temuan utama dari analisis regulasi, dan visualisasi sederhana dari inti konflik hukum.</p>
 
-                        <div class="bg-white rounded-xl shadow-lg p-6">
-                            <h2 class="text-xl font-semibold text-teal-700 mb-3">Visualisasi Konflik</h2>
-                            <p class="text-neutral-700 mb-4">Inti masalahnya adalah dugaan ketidaksesuaian antara alokasi tunjangan dalam regulasi (PP 18/2017) dan praktik yang terjadi di lapangan.</p>
-                            
-                            <div class="space-y-4 mt-6">
-                                <div class="p-4 border border-green-300 bg-green-50 rounded-lg">
-                                    <h3 class="font-semibold text-green-800">Aturan Regulasi (PP 18/2017)</h3>
-                                    <p class="text-sm text-green-700">Tunjangan Operasional & Rumah Tangga adalah hak khusus <strong class="font-bold">Pimpinan DPRD</strong>.</p>
-                                </div>
-                                
-                                <div class="flex justify-center">
-                                    <span class="text-4xl text-red-500">❌</span>
-                                </div>
+    <h3>Kasus Singkat</h3>
+    <ul>
+        <li class="icon">💰 Tunjangan sebesar Rp 60 Juta per bulan per anggota.</li>
+        <li class="icon">👥 Diduga diterima oleh seluruh anggota, bukan hanya pimpinan.</li>
+        <li class="icon">📜 Tunjangan bernama "Operasional dan Rumah Tangga".</li>
+    </ul>
 
-                                <div class="p-4 border border-red-300 bg-red-50 rounded-lg">
-                                    <h3 class="font-semibold text-red-800">Dugaan Pelanggaran (Malut)</h3>
-                                    <p class="text-sm text-red-700">Tunjangan serupa diduga diberikan kepada <strong class="font-bold">Seluruh Anggota DPRD</strong>.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <h3>Visualisasi Konflik</h3>
+    <p>Inti masalahnya adalah dugaan ketidaksesuaian antara alokasi tunjangan dalam regulasi (PP 18/2017) dan praktik yang terjadi di lapangan.</p>
+    <p><span class="highlight">Aturan Regulasi:</span> Tunjangan Operasional & Rumah Tangga adalah hak khusus Pimpinan DPRD.</p>
+    <p><span class="highlight">Dugaan Pelanggaran (Malut):</span> Tunjangan serupa diduga diberikan kepada seluruh anggota DPRD.</p>
+</section>
 
-                <div id="analisis" class="tab-pane hidden">
-                    <p class="text-base text-neutral-600 mb-6">Gunakan tombol di bawah untuk membandingkan secara langsung apa yang diatur dalam PP No. 18 Tahun 2017 dengan dugaan pelanggaran yang terjadi. Ini adalah inti dari analisis hukum.</p>
+<section id="analisis">
+    <h2>Analisis Tunjangan</h2>
 
-                    <div class="flex justify-center space-x-4 mb-6">
-                        <button class="analysis-toggle active-toggle" data-analysis="operasional">
-                            Tunjangan Operasional
-                        </button>
-                        <button class="analysis-toggle" data-analysis="rumahtangga">
-                            Tunjangan Rumah Tangga
-                        </button>
-                    </div>
+    <h3>Tunjangan Operasional</h3>
+    <p><strong>Aturan Hukum (PP 18/2017, Pasal 10):</strong> Tunjangan Operasional hanya diberikan kepada Pimpinan DPRD (Ketua & Wakil Ketua).</p>
+    <p><strong>Tujuan:</strong> Menunjang kegiatan operasional pimpinan, seperti koordinasi, pengaduan, dan representasi.</p>
+    <p><strong>Fakta:</strong> Tidak untuk anggota DPRD biasa.</p>
+    <p><strong>Dugaan Pelanggaran:</strong> Diberikan kepada seluruh anggota DPRD.</p>
+    <p><strong>Potensi Masalah:</strong> Pemberian ganda jika anggota sudah menerima Tunjangan Komunikasi Intensif (TKI) atau Tunjangan Reses.</p>
 
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-green-500">
-                            <h2 class="text-xl font-semibold text-neutral-900 mb-3">Aturan Hukum (PP 18/2017)</h2>
-                            <div id="aturan-hukum" class="text-neutral-700 space-y-4">
-                                <!-- Konten dinamis dari JS -->
-                            </div>
-                        </div>
-                        <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-red-500">
-                            <h2 class="text-xl font-semibold text-neutral-900 mb-3">Dugaan Pelanggaran</h2>
-                            <div id="dugaan-pelanggaran" class="text-neutral-700 space-y-4">
-                                <!-- Konten dinamis dari JS -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="proses-hukum" class="tab-pane hidden">
-                    <p class="text-base text-neutral-600 mb-6">Kejaksaan Tinggi memiliki wewenang untuk menyelidiki kasus ini. Berikut adalah alasan-alasan utama mengapa penyelidikan diperlukan, berdasarkan potensi pelanggaran hukum pidana korupsi.</p>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="bg-white rounded-xl shadow-lg p-6 transform transition-transform hover:scale-105">
-                            <span class="text-4xl">💰</span>
-                            <h2 class="text-lg font-semibold mt-3 mb-2">Potensi Kerugian Negara</h2>
-                            <p class="text-sm text-neutral-600">Setiap rupiah yang keluar dari APBD tanpa dasar hukum yang sah dapat dianggap sebagai kerugian keuangan negara/daerah.</p>
-                        </div>
-                        <div class="bg-white rounded-xl shadow-lg p-6 transform transition-transform hover:scale-105">
-                            <span class="text-4xl">⚖️</span>
-                            <h2 class="text-lg font-semibold mt-3 mb-2">Dugaan Penyalahgunaan Wewenang</h2>
-                            <p class="text-sm text-neutral-600">Meneliti bagaimana kebijakan ini bisa muncul dan apakah ada regulasi lokal (Pergub/Perda) yang bertentangan dengan aturan di atasnya (PP).</p>
-                        </div>
-                        <div class="bg-white rounded-xl shadow-lg p-6 transform transition-transform hover:scale-105">
-                            <span class="text-4xl">🤝</span>
-                            <h2 class="text-lg font-semibold mt-3 mb-2">Unsur Memperkaya Diri</h2>
-                            <p class="text-sm text-neutral-600">Menerima uang yang secara hukum bukan haknya dapat memenuhi unsur memperkaya diri sendiri atau orang lain secara melawan hukum.</p>
-                        </div>
-                        <div class="bg-white rounded-xl shadow-lg p-6 transform transition-transform hover:scale-105">
-                            <span class="text-4xl">🔍</span>
-                            <h2 class="text-lg font-semibold mt-3 mb-2">Klarifikasi & Penyelidikan</h2>
-                            <p class="text-sm text-neutral-600">Proses standar untuk mengumpulkan fakta dan keterangan awal guna menentukan ada atau tidaknya peristiwa pidana.</p>
-                        </div>
-                    </div>
-                </div>
+    <h3>Tunjangan Rumah Tangga</h3>
+    <p><strong>Aturan Hukum (PP 18/2017, Pasal 12 & 13):</strong> Pimpinan DPRD mendapat rumah dinas beserta perlengkapan dan biaya pemeliharaan (air, listrik, telepon, gas).</p>
+    <p>Anggota biasa berhak atas "Tunjangan Perumahan" berupa uang bulanan.</p>
+    <p><strong>Dugaan Pelanggaran:</strong> "Tunjangan Rumah Tangga" diberikan dalam bentuk uang tunai kepada seluruh anggota.</p>
+    <p><strong>Potensi Masalah:</strong> Istilah "belanja rumah tangga" hanya untuk rumah dinas Pimpinan. Jika anggota sudah menerima "Tunjangan Perumahan", pemberian tambahan bertentangan dengan regulasi.</p>
+</section>
 
-                <div id="dampak" class="tab-pane hidden">
-                    <p class="text-base text-neutral-600 mb-6">Bagian ini menguraikan estimasi dampak finansial dari dugaan tunjangan ini. Berdasarkan laporan, angka Rp 60 juta per bulan diterima oleh seluruh anggota selama satu periode jabatan (5 tahun).</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div class="bg-teal-600 text-white rounded-xl shadow-lg p-6">
-                            <h3 class="text-sm font-medium text-teal-100 uppercase">Tunjangan per Anggota</h3>
-                            <p class="text-3xl font-bold">Rp 60 Juta</p>
-                            <p class="text-teal-100">per Bulan</p>
-                        </div>
-                        <div class="bg-white text-neutral-800 rounded-xl shadow-lg p-6">
-                            <h3 class="text-sm font-medium text-neutral-500 uppercase">Perkiraan Anggota DPRD</h3>
-                            <p class="text-3xl font-bold">45 Anggota</p>
-                            <p class="text-neutral-500">(Estimasi)</p>
-                        </div>
-                        <div class="bg-white text-neutral-800 rounded-xl shadow-lg p-6">
-                            <h3 class="text-sm font-medium text-neutral-500 uppercase">Periode Jabatan</h3>
-                            <p class="text-3xl font-bold">60 Bulan</p>
-                            <p class="text-neutral-500">(2019 - 2024)</p>
-                        </div>
-                    </div>
+<section id="proses">
+    <h2>Proses Hukum</h2>
+    <p>Kejaksaan Tinggi memiliki wewenang untuk menyelidiki kasus ini, berdasarkan potensi pelanggaran pidana korupsi.</p>
 
-                    <div class="bg-white rounded-xl shadow-lg p-6">
-                        <h2 class="text-xl font-semibold text-neutral-900 mb-2">Estimasi Total Potensi Kerugian (5 Tahun)</h2>
-                        <p class="text-base text-neutral-600 mb-6">Grafik di bawah ini membandingkan total dugaan tunjangan yang dibayarkan selama 5 tahun (dengan asumsi 45 anggota) dengan jumlah yang seharusnya dialokasikan untuk tunjangan spesifik ini kepada anggota biasa (yaitu Rp 0).</p>
-                        <div class="chart-container">
-                            <canvas id="impactChart"></canvas>
-                        </div>
-                    </div>
-                </div>
+    <ul>
+        <li class="icon">💰 Potensi Kerugian Negara: APBD digunakan tanpa dasar hukum.</li>
+        <li class="icon">⚖️ Dugaan Penyalahgunaan Wewenang: Memeriksa kebijakan dan regulasi lokal.</li>
+        <li class="icon">🤝 Unsur Memperkaya Diri: Menerima uang yang bukan hak secara hukum.</li>
+        <li class="icon">🔍 Klarifikasi & Penyelidikan: Mengumpulkan fakta untuk menentukan ada/tidaknya peristiwa pidana.</li>
+    </ul>
+</section>
 
-            </div>
-        </main>
+<section id="dampak">
+    <h2>Data & Dampak</h2>
+    <p>Estimasi dampak finansial dari dugaan tunjangan:</p>
 
-        <footer class="mt-12 border-t border-neutral-200 pt-8 text-center">
-            <p class="text-sm text-neutral-500">Aplikasi analisis interaktif ini dibuat berdasarkan telaah hukum yang tersedia. Ini bukan merupakan dokumen hukum resmi.</p>
-        </footer>
+    <div class="data-box">
+        <p><strong>Tunjangan per Anggota:</strong> Rp 60 Juta per bulan</p>
+        <p><strong>Perkiraan Anggota DPRD:</strong> 45 Anggota</p>
+        <p><strong>Periode Jabatan:</strong> 60 Bulan (2019 - 2024)</p>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabs = document.querySelectorAll('.nav-tab');
-            const panes = document.querySelectorAll('.tab-pane');
-            const analysisToggles = document.querySelectorAll('.analysis-toggle');
-            const aturanHukumEl = document.getElementById('aturan-hukum');
-            const dugaanPelanggaranEl = document.getElementById('dugaan-pelanggaran');
+    <h3>Estimasi Total Potensi Kerugian (5 Tahun)</h3>
+    <table>
+        <tr>
+            <th>Keterangan</th>
+            <th>Jumlah</th>
+        </tr>
+        <tr>
+            <td>Total Dugaan Tunjangan Dibayarkan</td>
+            <td>Rp 60 Juta × 45 × 60 = Rp 162 Miliar</td>
+        </tr>
+        <tr>
+            <td>Total Sesuai Regulasi untuk Anggota Biasa</td>
+            <td>Rp 0</td>
+        </tr>
+    </table>
+</section>
 
-            const analysisContent = {
-                operasional: {
-                    aturan: `
-                        <p><strong>Regulasi (Pasal 10):</strong> "Tunjangan Operasional" secara eksplisit diberikan hanya kepada <strong>Pimpinan DPRD</strong> (Ketua dan Wakil Ketua).</p>
-                        <p><strong>Tujuan:</strong> Bersifat lumsum untuk menunjang kegiatan operasional pimpinan, seperti koordinasi, penanganan pengaduan, dan representasi.</p>
-                        <p><strong>Fakta:</strong> Regulasi <strong class="text-red-600">tidak menyebutkan</strong> tunjangan ini untuk Anggota DPRD biasa.</p>
-                    `,
-                    pelanggaran: `
-                        <p><strong>Dugaan:</strong> Tunjangan Operasional diduga diberikan kepada <strong>seluruh anggota DPRD</strong>.</p>
-                        <p><strong>Potensi Masalah:</strong> Jika anggota sudah menerima Tunjangan Komunikasi Intensif (TKI) dan Tunjangan Reses untuk kegiatan mereka, ini berpotensi menjadi <strong class="text-red-600">pemberian ganda (duplikasi)</strong> dan tidak sesuai alokasi PP 18/2017.</p>
-                    `
-                },
-                rumahtangga: {
-                    aturan: `
-                        <p><strong>Regulasi (Pasal 12 & 13):</strong> <strong>Pimpinan DPRD</strong> disediakan rumah negara (rumah dinas) beserta perlengkapan dan biaya pemeliharaannya.</p>
-                        <p><strong>Biaya Pemeliharaan:</strong> Inilah yang mencakup "belanja rumah tangga" (Pasal 13), seperti air, listrik, telepon, dan gas.</p>
-                        <p><strong>Untuk Anggota:</strong> Anggota biasa yang tidak mendapat rumah dinas berhak atas <strong class="text-green-600">"Tunjangan Perumahan"</strong> dalam bentuk uang tunai bulanan.</p>
-                    `,
-                    pelanggaran: `
-                        <p><strong>Dugaan:</strong> "Tunjangan Rumah Tangga" (sebagai biaya belanja) diberikan dalam bentuk uang tunai kepada <strong>seluruh anggota</strong>.</p>
-                        <p><strong>Potensi Masalah:</strong> Istilah "belanja rumah tangga" melekat pada rumah dinas Pimpinan, bukan untuk anggota. Jika anggota sudah menerima "Tunjangan Perumahan", pemberian "tunjangan rumah tangga" tambahan jelas <strong class="text-red-600">bertentangan dengan regulasi</strong>.</p>
-                    `
-                }
-            };
+<footer>
+    <p>&copy; 2025 Analisis Interaktif DPRD Maluku Utara. Semua hak dilindungi.</p>
+</footer>
 
-            function updateAnalysisContent(type) {
-                if (!analysisContent[type]) return;
-                aturanHukumEl.innerHTML = analysisContent[type].aturan;
-                dugaanPelanggaranEl.innerHTML = analysisContent[type].pelanggaran;
-                
-                analysisToggles.forEach(toggle => {
-                    toggle.classList.remove('active-toggle');
-                    if (toggle.dataset.analysis === type) {
-                        toggle.classList.add('active-toggle');
-                    }
-                });
-            }
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(item => item.classList.remove('active-tab'));
-                    tab.classList.add('active-tab');
-
-                    const targetPane = document.getElementById(tab.dataset.tab);
-                    panes.forEach(pane => pane.classList.add('hidden'));
-                    if (targetPane) {
-                        targetPane.classList.remove('hidden');
-                    }
-                    
-                    if (tab.dataset.tab === 'dampak') {
-                        createImpactChart();
-                    }
-                });
-            });
-
-            analysisToggles.forEach(toggle => {
-                toggle.addEventListener('click', () => {
-                    updateAnalysisContent(toggle.dataset.analysis);
-                });
-            });
-
-            updateAnalysisContent('operasional');
-
-            let impactChartInstance = null;
-            function createImpactChart() {
-                const ctx = document.getElementById('impactChart');
-                if (!ctx) return;
-                
-                if (impactChartInstance) {
-                    impactChartInstance.destroy();
-                }
-
-                const totalDugaan = 60000000 * 45 * 60;
-
-                impactChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Alokasi Sah (Anggota)', 'Total Dugaan Tunjangan (5 Tahun)'],
-                        datasets: [{
-                            label: 'Potensi Kerugian (dalam Miliar Rupiah)',
-                            data: [0, totalDugaan],
-                            backgroundColor: [
-                                'rgba(52, 211, 153, 0.6)', 
-                                'rgba(239, 68, 68, 0.6)'    
-                            ],
-                            borderColor: [
-   
+</body>
+</html>
