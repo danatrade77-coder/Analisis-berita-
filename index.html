@@ -2,35 +2,67 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analisis Bisnis Produksi Kopra Putih</title>
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
-            line-height: 1.6;
-            margin: 40px;
-            color: #333;
+            line-height: 1.7;
+            margin: 16px;
+            color: #222;
+            background-color: #ffffff;
         }
-        h1, h2, h3 {
+
+        h1 {
+            font-size: 22px;
+            text-align: center;
             color: #2c5f2d;
+            margin-bottom: 20px;
         }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 15px 0;
+
+        h2 {
+            font-size: 18px;
+            color: #2c5f2d;
+            margin-top: 28px;
+            margin-bottom: 10px;
         }
-        table, th, td {
-            border: 1px solid #999;
+
+        p, li {
+            font-size: 15px;
         }
-        th, td {
-            padding: 10px;
-            text-align: left;
+
+        ul {
+            padding-left: 18px;
         }
-        th {
-            background-color: #f2f2f2;
-        }
+
         .highlight {
             font-weight: bold;
             color: #1a4d2e;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        /* Membuat tabel lebih ramah Android */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -68,6 +100,7 @@ Untuk menghasilkan 2.000 kg kopra putih per hari, dibutuhkan:
 </ul>
 
 <h2>4. Biaya Bahan Baku</h2>
+<div class="table-wrapper">
 <table>
     <tr>
         <th>Komponen</th>
@@ -80,8 +113,10 @@ Untuk menghasilkan 2.000 kg kopra putih per hari, dibutuhkan:
         <td>32.000.000</td>
     </tr>
 </table>
+</div>
 
 <h2>5. Biaya Operasional dan Produksi</h2>
+<div class="table-wrapper">
 <table>
     <tr>
         <th>Jenis Biaya</th>
@@ -100,8 +135,10 @@ Untuk menghasilkan 2.000 kg kopra putih per hari, dibutuhkan:
         <th>5.500.000</th>
     </tr>
 </table>
+</div>
 
 <h2>6. Total Modal Produksi Harian</h2>
+<div class="table-wrapper">
 <table>
     <tr>
         <th>Komponen</th>
@@ -120,8 +157,10 @@ Untuk menghasilkan 2.000 kg kopra putih per hari, dibutuhkan:
         <th>37.500.000</th>
     </tr>
 </table>
+</div>
 
 <h2>7. Hasil Produksi</h2>
+<div class="table-wrapper">
 <table>
     <tr>
         <th>Produk</th>
@@ -140,8 +179,10 @@ Untuk menghasilkan 2.000 kg kopra putih per hari, dibutuhkan:
         <td>1 ton</td>
     </tr>
 </table>
+</div>
 
 <h2>8. Pendapatan Harian</h2>
+<div class="table-wrapper">
 <table>
     <tr>
         <th>Produk</th>
@@ -169,6 +210,7 @@ Untuk menghasilkan 2.000 kg kopra putih per hari, dibutuhkan:
         <th>49.400.000</th>
     </tr>
 </table>
+</div>
 
 <h2>9. Analisis Keuntungan</h2>
 <p>
@@ -196,5 +238,4 @@ stabilitas dan margin keuntungan usaha.
 </p>
 
 </body>
-    </html>
-    
+</html>
